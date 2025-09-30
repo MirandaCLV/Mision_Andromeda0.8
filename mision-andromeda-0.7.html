@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Misión Andrómeda</title>
+  <style>
+    body { 
+      margin: 0;
+      font-family: monospace; 
+      padding: 20px; 
+      text-align: center;
+      background: url('fondo.gif') no-repeat center center fixed;
+      background-size: cover;
+      color: #0ff; /* color de texto */
+    }
+    h2 {
+      font-size: 3em; /* título más grande */
+    }
+    #consola {
+      font-size: 2em; /* letra más grande */
+      margin: 15px 0;
+    }
+    .mensaje { margin: 15px 0; font-size: 2em; }
+    .correcto { color: #0f0; font-size: 2em; }
+    .incorrecto { color: #f00; font-size: 2em; }
+    .yaencontrado { color: #ff0; font-size: 2em; }
+    button { 
+      background: #0ff; 
+      color: black; 
+      border: none; 
+      padding: 15px 20px; 
+      margin: 5px; 
+      cursor: pointer; 
+      border-radius: 6px; 
+      font-size: 1.8em; /* botón más grande */
+    }
+    input { 
+      padding: 12px; 
+      margin-top: 10px; 
+      font-size: 1.8em; /* input más grande */
+    }
+  </style>
+</head>
+<body>
+  <h2>🛰️ Simulación: Misión Andrómeda</h2>
+  <div id="consola"></div>
+  <div id="opciones"></div>
+
+  <script>
+    const consola = document.getElementById("consola");
+    const opciones = document.getElementById("opciones");
+
+    const palabraSecreta = ["A","L","P","H","E","R","A","T","Z"];
+    let codigoFragmentos = [];
+
+    function escribir(texto, tipo="mensaje") {
+      const p = document.createElement("p");
+      p.className = tipo;
+      p.textContent = texto;
+      consola.appendChild(p);
+      consola.scrollTop = consola.scrollHeight;
+    }
+
+    function mostrarOpciones(choices) {
+      opciones.innerHTML = "";
+      choices.forEach(c => {
+        const b = document.createElement("button");
+        b.textContent = c.texto;
+        b.onclick = c.accion;
+        opciones.appendChild(b);
+      });
+    }
+
+    // INICIO
+    escribir("Bienvenido/a a la Base Espacial Andrómeda.");
+    escribir("Soy A.R.I.A., tu asistente de misión.");
+    escribir("Debes encontrar los códigos QR en el evento para descifrar la señal alienígena.");
+
+    mostrarOpciones([
+      { texto: "Iniciar misión", accion: fase1 }
+    ]);
+
+    function fase1() {
+      escribir("Los niveles de oxígeno han bajado al 72%. ¿Qué protocolo deseas activar?");
+      mostrarOpciones([
+        { texto: "Protocolo normal", accion: () => { escribir("Oxígeno restablecido lentamente."); fase2(); } },
+        { texto: "Protocolo de emergencia", accion: () => { escribir("Oxígeno restablecido rápido pero consumiendo recursos."); fase2(); } }
+      ]);
+    }
+
+    function fase2() {
+      escribir("Se ha recibido una cápsula con muestras. ¿Crees que contienen vida?");
+      mostrarOpciones([
+        { texto: "Sí", accion: () => { escribir("Correcto: se detectaron compuestos orgánicos."); fase3(); } },
+        { texto: "No", accion: () => { escribir("Error: había bacterias desconocidas."); fase3(); } }
+      ]);
+    }
+
+    function fase3() {
+      escribir("Una señal de origen desconocido ha llegado a la base.");
+      escribir("🔎 Se han enviado mensajes de cada planeta. Recolecta los códigos QR para descubrir la palabra secreta (9 letras).");
+      mostrarOpciones([
+        { texto: "Ingresar código", accion: ingresarCodigo }
+      ]);
+    }
+
+    function ingresarCodigo() {
+      opciones.innerHTML = "";
+      const input = document.createElement("input");
+      input.placeholder = "Escribe el carácter del QR...";
+      const boton = document.createElement("button");
+      boton.textContent = "Enviar";
+
+      boton.onclick = () => {
+        const valor = input.value.trim().toUpperCase();
+        if (!valor || valor.length !== 1) {
+          escribir("❌ Ingresa solo una letra a la vez.", "incorrecto");
+          return;
+        }
+
+        const index = palabraSecreta.findIndex((letra, i) => letra === valor && !codigoFragmentos[i]);
+
+        if (index !== -1) {
+          codigoFragmentos[index] = valor;
+          escribir(`✅ Fragmento correcto: ${valor} (${codigoFragmentos.filter(l => l).length}/${palabraSecreta.length})`, "correcto");
+        } else {
+          escribir("❌ Fragmento incorrecto o ya ingresado.", "incorrecto");
+        }
+
+        if (codigoFragmentos.filter(l => l).length === palabraSecreta.length) {
+          escribir("🎉 ¡Has reunido todos los fragmentos! La palabra secreta es: " + codigoFragmentos.join(""), "correcto");
+          escribir("🌌 CONTACTO ESTABLECIDO. Los sensores detectan: ¡Hay vida en esta región del espacio, cerca de ALPHERATZ!", "correcto");
+          opciones.innerHTML = "";
+        } else {
+          mostrarOpciones([
+            { texto: "Ingresar otro código", accion: ingresarCodigo }
+          ]);
+        }
+      };
+
+      opciones.appendChild(input);
+      opciones.appendChild(boton);
+    }
+  </script>
+</body>
+</html>
