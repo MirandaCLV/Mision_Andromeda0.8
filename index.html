@@ -11,7 +11,7 @@
       text-align: center;
       background: url('fondo.gif') no-repeat center center fixed;
       background-size: cover;
-      color: #0ff; /* color de texto */
+      color: white; /* color de texto */
     }
     h2 {
       font-size: 3em; /* título más grande */
@@ -21,12 +21,12 @@
       margin: 15px 0;
     }
     .mensaje { margin: 15px 0; font-size: 2em; }
-    .correcto { color: #0f0; font-size: 2em; }
-    .incorrecto { color: #f00; font-size: 2em; }
-    .yaencontrado { color: #ff0; font-size: 2em; }
+    .correcto { color: white; font-size: 2em; }
+    .incorrecto { color: white; font-size: 2em; }
+    .yaencontrado { color: white; font-size: 2em; }
     button { 
       background: #0ff; 
-      color: black; 
+      color: white; 
       border: none; 
       padding: 15px 20px; 
       margin: 5px; 
@@ -128,8 +128,8 @@
         }
 
         if (codigoFragmentos.filter(l => l).length === palabraSecreta.length) {
-          escribir("🎉 ¡Has reunido todos los fragmentos! La palabra secreta es: " + codigoFragmentos.join(""), "correcto");
-          escribir("🌌 CONTACTO ESTABLECIDO. Los sensores detectan: ¡Hay vida en esta región del espacio, cerca de ALPHERATZ!", "correcto");
+          escribir(" ¡Has reunido todos los fragmentos! La palabra secreta es: " + codigoFragmentos.join(""), "correcto");
+          escribir("🌌 CONTACTO ESTABLECIDO. Los sensores detectan: ¡Al parecer existe vida en esta región del espacio, dentro de la constelacion andrómeda, cerca de la estrella ALPHERATZ! ", "correcto");
           opciones.innerHTML = "";
         } else {
           mostrarOpciones([
@@ -144,3 +144,4 @@
   </script>
 </body>
 </html>
+
